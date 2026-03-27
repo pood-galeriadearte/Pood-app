@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>POOD | Comissões de Arte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ededed;
+            overflow-x: hidden;
+        }
+
+        /* Modo Claro */
+        body.light-mode {
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .navbar {
+            background: rgba(245, 245, 245, 0.9);
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .nav-links a {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .character-card,
+        body.light-mode .plan-card,
+        body.light-mode .category-card,
+        body.light-mode .product-card,
+        body.light-mode .profile-card,
+        body.light-mode .cart-sidebar,
+        body.light-mode .checkout-modal {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .cart-sidebar,
+        body.light-mode .checkout-modal {
+            background: white;
+        }
+
+        body.light-mode .cart-item {
+            border-bottom-color: #ddd;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f0f1a 100%);
+        }
+
+        body.light-mode .bg-animation {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 50%, #f0f0f0 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(230, 126, 34, 0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(230, 126, 34, 0.3);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header / Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(230, 126, 34, 0.2);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.8);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            font-size: 0.9rem;
+            display: block;
+            color: #888;
+            font-weight: 400;
+            letter-spacing: normal;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ededed;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: #e67e22;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #e67e22;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Floating Buttons */
+        .floating-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .float-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(230, 126, 34, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            background: #e67e22;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(230, 126, 34, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h3 {
+            color: #e67e22;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-cart:hover {
+            color: #e67e22;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-price {
+            font-size: 0.85rem;
+            color: #e67e22;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-item-quantity {
+            width: 40px;
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 0.25rem;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .clear-cart {
+            width: 100%;
+            padding: 0.8rem;
+            background: transparent;
+            border: 1px solid #ff6b6b;
+            border-radius: 50px;
+            color: #ff6b6b;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .clear-cart:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .checkout-modal.active {
+            display: flex;
+        }
+
+        .checkout-content {
+            background: #1a1a2e;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        body.light-mode .checkout-content {
+            background: white;
+        }
+
+        .checkout-step {
+            display: none;
+        }
+
+        .checkout-step.active-step {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .checkout-step h3 {
+            color: #e67e22;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-step p {
+            margin-bottom: 1.5rem;
+            color: #aaa;
+        }
+
+        .characters-input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(230, 126, 34, 0.5);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .signature-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .signature-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #e67e22;
+            background: transparent;
+            color: #e67e22;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .signature-btn.active {
+            background: #e67e22;
+            color: white;
+        }
+
+        .final-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-whatsapp-final {
+            flex: 1;
+            padding: 1rem;
+            background: #25d366;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: 1px solid #888;
+            border-radius: 50px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .order-summary {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+            flex-wrap: wrap;
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            flex: 1;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(230, 126, 34, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #e67e22;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, #e67e22);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #e67e22;
+            color: #e67e22;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(230, 126, 34, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            animation: fadeInRight 1s ease;
+        }
+
+        .hero-image .avatar {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            box-shadow: 0 20px 40px rgba(230, 126, 34, 0.3);
+            animation: floatAvatar 3s ease-in-out infinite;
+        }
+
+        @keyframes floatAvatar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Character Cards */
+        .characters-section {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+            border-radius: 3px;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .character-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(230, 126, 34, 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .character-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: bounce 3s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .character-card h3 {
+            font-size: 1.5rem;
+            color: #e67e22;
+            margin-bottom: 1rem;
+        }
+
+        .character-card p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        /* Speech Bubble */
+        .speech-section {
+            padding: 4rem 0;
+        }
+
+        .speech-card {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.1), rgba(243, 156, 18, 0.05));
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid rgba(230, 126, 34, 0.3);
+            position: relative;
+            text-align: center;
+        }
+
+        .speech-card::before {
+            content: '“';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 5rem;
+            color: rgba(230, 126, 34, 0.3);
+            font-family: serif;
+        }
+
+        .speech-card::after {
+            content: '”';
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 5rem;
+            color: rgba(230, 126, 34, 0.3);
+            font-family: serif;
+        }
+
+        .speech-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .speech-author {
+            margin-top: 2rem;
+            font-weight: 600;
+            color: #e67e22;
+        }
+
+        /* Plans Section */
+        .plans-section {
+            padding: 6rem 0;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(230, 126, 34, 0.5);
+        }
+
+        .plan-card.popular {
+            border: 2px solid #e67e22;
+            transform: scale(1.02);
+        }
+
+        .plan-card.popular:hover {
+            transform: scale(1.02) translateY(-10px);
+        }
+
+        .popular-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            padding: 0.5rem 1rem;
+            border-bottom-left-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #e67e22;
+            margin: 1rem 0;
+        }
+
+        .plan-price small {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .plan-features li {
+            margin: 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #aaa;
+        }
+
+        .plan-features li i {
+            color: #e67e22;
+            width: 20px;
+        }
+
+        .btn-plan {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-plan:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
+
+        /* Shop Section */
+        .shop-section {
+            padding: 6rem 0;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            color: #e67e22;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .commission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(230, 126, 34, 0.5);
+        }
+
+        .product-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e67e22;
+            margin: 0.8rem 0;
+        }
+
+        .member-price {
+            font-size: 0.8rem;
+            color: #4caf50;
+        }
+
+        .extra-info {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        .btn-add-cart {
+            background: transparent;
+            border: 1px solid #e67e22;
+            color: #e67e22;
+            padding: 0.8rem;
+            border-radius: 50px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-add-cart:hover {
+            background: #e67e22;
+            color: white;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            padding: 4rem 0;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile-card.simple {
+            padding: 2rem;
+        }
+
+        .profile-avatar-simple {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            margin: 0 auto 1.5rem;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .profile-info-simple {
+            text-align: center;
+        }
+
+        .profile-name-simple {
+            font-size: 1.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-bio-simple {
+            color: #aaa;
+            margin: 1rem 0;
+            cursor: pointer;
+            line-height: 1.6;
+        }
+
+        .profile-badge-simple {
+            display: inline-block;
+            background: rgba(230, 126, 34, 0.2);
+            color: #e67e22;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .upgrade-banner {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.2), rgba(243, 156, 18, 0.1));
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 3rem 0;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: #e67e22;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e67e22;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-image .avatar {
+                width: 200px;
+                height: 200px;
+                font-size: 5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <div class="float-btn" id="themeToggle" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+        </div>
+        <div class="float-btn" id="profileFloatBtn" onclick="goToProfile()" style="display: none;">
+            <i class="fas fa-user"></i>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Seu Carrinho</h3>
+            <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div style="text-align: center; padding: 2rem; color: #888;">
+                Seu carrinho está vazio
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">R$ 0,00</span>
+            </div>
+            <button class="checkout-btn" onclick="startCheckout()">
+                <i class="fas fa-shopping-bag"></i> Finalizar Compra
+            </button>
+            <button class="clear-cart" onclick="clearCart()">
+                <i class="fas fa-trash"></i> Limpar Carrinho
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="checkout-modal">
+        <div class="checkout-content">
+            <button class="close-cart" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer;" onclick="closeCheckout()">&times;</button>
+            
+            <!-- Step 1: Quantidade de personagens -->
+            <div id="step1" class="checkout-step active-step">
+                <h3><i class="fas fa-users"></i> Quantos personagens?</h3>
+                <p>Informe quantos personagens você quer na sua arte (máximo 10)</p>
+                <input type="number" id="charactersCount" class="characters-input" min="1" max="10" value="1">
+                <div class="final-buttons">
+                    <button class="btn-whatsapp-final" onclick="nextStep()">
+                        <i class="fas fa-arrow-right"></i> Próximo
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Assinatura do produtor -->
+            <div id="step2" class="checkout-step">
+                <h3><i class="fas fa-signature"></i> Assinatura do produtor</h3>
+                <p>Deseja receber o produto sem a assinatura do produtor?</p>
+                <div class="signature-options">
+                    <button class="signature-btn" onclick="setSignature(false)">Com assinatura</button>
+                    <button class="signature-btn" onclick="setSignature(true)">Sem assinatura</button>
+                </div>
+                <div class="final-buttons">
+                    <button class="btn-back" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                    <button class="btn-whatsapp-final" onclick="nextToFinal()">
+                        <i class="fas fa-arrow-right"></i> Próximo
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Resumo e envio -->
+            <div id="step3" class="checkout-step">
+                <h3><i class="fas fa-check-circle"></i> Resumo do Pedido</h3>
+                <div id="orderSummary" class="order-summary"></div>
+                <div class="final-buttons">
+                    <button class="btn-back" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                    <button class="btn-whatsapp-final" id="sendWhatsappBtn" onclick="sendFinalOrder()">
+                        <i class="fab fa-whatsapp"></i> Enviar Encomenda via WhatsApp
+                    </button>
+                </div>
+                <p style="font-size: 0.7rem; margin-top: 1rem; color: #888;">Números: +55 44 99102-7941 / +55 21 97033-1467</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="logo">
+                POOD
+                <span>A Piece Of Our Drawing</span>
+            </div>
+            <div class="nav-links">
+                <a class="active" onclick="showSection('intro')">Início</a>
+                <a onclick="showSection('subscription')">Assinatura</a>
+                <a onclick="showSection('shop')">Comissões</a>
+                <a id="profileNavBtn" onclick="showSection('profile')" style="display: none;">Perfil</a>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- INTRO SECTION -->
+        <section id="intro-section" class="active-section">
+            <div class="hero">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-palette"></i> Comunidade de Arte
+                    </div>
+                    <h1>Desenhe seus<br>sonhos com a gente</h1>
+                    <p>Kenma e Kuroo criaram a POOD para realçar a comunidade artística e combater as artes feitas com IA. Aqui, cada traço conta uma história.</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="showSection('subscription')">
+                            <i class="fas fa-gem"></i> Assinar Agora
+                        </button>
+                        <button class="btn-secondary" onclick="showSection('shop')">
+                            <i class="fas fa-shopping-cart"></i> Ver Comissões
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="avatar">
+                        🎨
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Cards -->
+            <div class="characters-section">
+                <h2 class="section-title">Nossos Fundadores</h2>
+                <div class="characters-grid">
+                    <div class="character-card">
+                        <div class="character-icon">🐱</div>
+                        <h3>Kenma Kozume</h3>
+                        <p>🎮 O estrategista criativo</p>
+                        <p>"A arte é como um jogo - cada traço é uma jogada estratégica!"</p>
+                        <p style="margin-top: 1rem;">✨ Especialista em teoria das cores e composição</p>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon">🐈‍⬛</div>
+                        <h3>Tetsurō Kuroo</h3>
+                        <p>🔬 O visionário inspirador</p>
+                        <p>"Vamos construir uma comunidade onde a arte humana brilhe!"</p>
+                        <p style="margin-top: 1rem;">✨ Mestre em técnicas tradicionais e digitais</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speech Bubble -->
+            <div class="speech-section">
+                <div class="speech-card">
+                    <div class="speech-text">
+                        <p>🎌 Ohayō! 🎌</p>
+                        <p><strong>Eu me chamo Kenma, e eu e Kuroo decidimos criar a POOD para realçar a comunidade artística e diminuir as artes com IA.</strong></p>
+                        <p><em>"Esperamos que gostem do nosso trabalho"</em> 🌸</p>
+                    </div>
+                    <div class="speech-author">
+                        — Kenma & Kuroo, Fundadores da POOD
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUBSCRIPTION SECTION -->
+        <section id="subscription-section" style="display: none;">
+            <div class="plans-section">
+                <h2 class="section-title">Escolha seu Plano</h2>
+                <div class="plans-grid">
+                    <div class="plan-card">
+                        <div class="plan-name">🎨 Gratuito</div>
+                        <div class="plan-price">R$ 0<small>,00</small></div>
+                        <ul class="plan-features">
+                            <li><i class="fas fa-check"></i> Acesso à comunidade</li>
+                            <li><i class="fas fa-check"></i> Participação nos desafios</li>
+                            <li><i class="fas fa-check"></i> Conteúdos gratuitos do canal</li>
+                            <li><i class="fas fa-times"></i> Sem desconto nas comissões</li>
+                            <li><i class="fas fa-times"></i> Perfil simples (sem banner)</li>
+                        </ul>
+                        <button class="btn-plan" onclick="openWhatsApp('free')">
+                            <i class="fab fa-whatsapp"></i> Participar Gratuitamente
+                        </button>
+                    </div>
+
+                    <div class="plan-card popular">
+                        <div class="popular-tag">⭐ MAIS POPULAR</div>
+                        <div class="plan-name">🐱 Cat-Semi Premium</div>
+                        <div class="plan-price">R$ 10<small>,00</small><span style="font-size: 0.9rem;">/mês</span></div>
+                        <ul class="plan-features">
+                            <li><i class="fas fa-check"></i> 10% de desconto em comissões</li>
+                            <li><i class="fas fa-check"></i> Acesso aos combos</li>
+                            <li><i class="fas fa-check"></i> Perfil completo com banner</li>
+                            <li><i class="fas fa-check"></i> Insígnia da POOD</li>
+                        </ul>
+                        <button class="btn-plan" onclick="openPixModal('basic')">
+                            <i class="fas fa-qrcode"></i> Assinar com PIX
+                        </button>
+                    </div>
+
+                    <div class="plan-card">
+                        <div class="plan-name">⭐ Full Premium</div>
+                        <div class="plan-price">R$ 20<small>,00</small><span style="font-size: 0.9rem;">/mês</span></div>
+                        <ul class="plan-features">
+                            <li><i class="fas fa-check"></i> 10% de desconto em comissões</li>
+                            <li><i class="fas fa-check"></i> Acesso aos combos</li>
+                            <li><i class="fas fa-check"></i> Perfil completo com banner</li>
+                            <li><i class="fas fa-check"></i> Insígnia da POOD</li>
+                            <li><i class="fas fa-check"></i> Combos personalizados</li>
+                        </ul>
+                        <button class="btn-plan" onclick="openPixModal('premium')">
+                            <i class="fas fa-qrcode"></i> Assinar com PIX
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de Inscrição -->
+            <div class="speech-card" style="margin-top: 2rem;">
+                <h3 style="color: #e67e22; margin-bottom: 1.5rem;">📝 Ficha de Inscrição</h3>
+                <form id="subscription-form" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label>Nome completo *</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Idade *</label>
+                        <input type="number" id="age" min="1" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de aniversário *</label>
+                        <input type="date" id="birthday" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Plano *</label>
+                        <select id="planSelect">
+                            <option value="free">Gratuito - R$0/mês</option>
+                            <option value="basic">Cat-Semi Premium - R$10/mês</option>
+                            <option value="premium">Full Premium - R$20/mês</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>O que te incomoda? (opcional)</label>
+                        <textarea id="comfort" rows="2" placeholder="Queremos um espaço seguro para todos!"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Quais artes você mais gosta?</label>
+                        <textarea id="interests" rows="2" placeholder="Ex: mangá, aquarela, digital..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">
+                        <i class="fas fa-heart"></i> Entrar para Comunidade
+                    </button>
+                </form>
+                <div id="successMsg" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(76, 175, 80, 0.2); border-radius: 10px;"></div>
+            </div>
+        </section>
+
+        <!-- SHOP SECTION (COMISSÕES) -->
+        <section id="shop-section" style="display: none;">
+            <div class="shop-section">
+                <h2 class="section-title">Comissões de Arte</h2>
+                <p style="text-align: center; margin-bottom: 2rem;">Adicione ao carrinho e finalize sua compra! <strong style="color: #e67e22;">Assinantes ganham 10% de desconto</strong> 🎨</p>
+                
+                <div id="commissions-container"></div>
+            </div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section id="profile-section" style="display: none;">
+            <div class="profile-section">
+                <div class="profile-card simple" id="profileCardSimple">
+                    <div class="profile-avatar-simple" id="profileAvatarSimple" onclick="editAvatarSimple()">
+                        🎨
+                        <div class="avatar-edit">✏️</div>
+                    </div>
+                    <div class="profile-info-simple">
+                        <div class="profile-name-simple" id="profileNameSimple" onclick="editNameSimple()">Artista POOD</div>
+                        <div class="profile-bio-simple" id="profileBioSimple" onclick="editBioSimple()">Artista apaixonado por arte! 🎨✨</div>
+                        <div class="profile-badge-simple" id="profileBadgeSimple">Membro Gratuito</div>
+                    </div>
+                </div>
+                
+                <div class="upgrade-banner">
+                    <h3><i class="fas fa-gem"></i> Desbloqueie 10% de desconto!</h3>
+                    <p>Assine os planos Premium e ganhe 10% de desconto em todas as comissões!</p>
+                    <button class="btn-primary" onclick="showSection('subscription')" style="margin-top: 1rem; padding: 0.8rem 1.5rem;">
+                        <i class="fas fa-crown"></i> Conhecer Planos
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Links -->
+        <div class="social-links">
+            <a href="https://www.youtube.com/@poodartists" target="_blank" class="social-link"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/pood.artistheaven" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@pood.heaven_k.k" target="_blank" class="social-link"><i class="fab fa-tiktok"></i></a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🔴 POOD | A Piece Of Our Drawing</p>
+            <p style="margin-top: 0.5rem;">"Contra a arte de IA, pela criatividade humana!"</p>
+            <p style="margin-top: 0.5rem;">📞 +55 44 99102-7941 | 📧 k.k.pood.drawing@gmail.com</p>
+            <p style="margin-top: 0.5rem;">💚 PIX: k.k.pood.drawing@gmail.com</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem;">Kenma & Kuroo © 2026</p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="pixModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closePixModal()">&times;</span>
+            <h3 style="color: #25d366;">💚 Pagamento via PIX</h3>
+            <div style="margin: 1.5rem 0;">
+                <p><strong>Chave PIX:</strong></p>
+                <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 10px; font-family: monospace;">k.k.pood.drawing@gmail.com</div>
+                <button onclick="copyPix()" style="margin-top: 0.5rem; background: #25d366; border: none; padding: 0.5rem 1rem; border-radius: 50px; color: white; cursor: pointer;">📋 Copiar</button>
+            </div>
+            <button class="btn-primary" onclick="sendPaymentProof()">📱 Enviar Comprovante</button>
+        </div>
+    </div>
+
+    <div id="profileEditModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeProfileModal()">&times;</span>
+            <h3 style="color: #e67e22;">✏️ Editar Perfil</h3>
+            <div class="form-group">
+                <label>Nome de Exibição</label>
+                <input type="text" id="editNameInput">
+            </div>
+            <div class="form-group">
+                <label>Biografia</label>
+                <textarea id="editBioInput" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>URL da Foto de Perfil (opcional)</label>
+                <input type="text" id="editAvatarInput" placeholder="https://exemplo.com/sua-foto.jpg">
+            </div>
+            <button class="btn-primary" onclick="saveProfileSimple()" style="width: 100%;">💾 Salvar Perfil</button>
+        </div>
+    </div>
+
+    <script>
+        // Comissões Data
+        const commissionsData = {
+            chibi: {
+                name: "🎀 Estilo Chibi",
+                icon: "🎀",
+                description: "Personagens fofos e estilizados",
+                items: [
+                    { id: "chibi_perfil", name: "Perfil (Chibi)", price: 2.00, extra: 0.50 },
+                    { id: "chibi_corpo", name: "Corpo Todo (Chibi)", price: 4.00, extra: 0.50 }
+                ]
+            },
+            painted: {
+                name: "🎨 Pintura Simples (Chibi)",
+                icon: "🎨",
+                description: "Colorido básico com sombras suaves",
+                items: [
+                    { id: "painted_chibi_perfil", name: "Perfil Pintado (Chibi)", price: 3.00, extra: 0.50 },
+                    { id: "painted_chibi_corpo", name: "Corpo Todo Pintado (Chibi)", price: 5.00, extra: 0.50 }
+                ]
+            },
+            rendered: {
+                name: "✨ Renderizado (Chibi)",
+                icon: "✨",
+                description: "Arte finalizada com sombras e luzes",
+                items: [
+                    { id: "rendered_chibi_perfil", name: "Perfil Renderizado (Chibi)", price: 4.00, extra: 0.50 },
+                    { id: "rendered_chibi_corpo", name: "Corpo Todo Renderizado (Chibi)", price: 5.00, extra: 0.50 }
+                ]
+            },
+            normal: {
+                name: "✨ Estilo Normal",
+                icon: "✨",
+                description: "Arte detalhada com proporções reais",
+                items: [
+                    { id: "normal_perfil", name: "Perfil (Normal)", price: 4.00, extra: 1.50 },
+                    { id: "normal_meio", name: "Meio Corpo (Normal)", price: 6.00, extra: 1.50 },
+                    { id: "normal_corpo", name: "Corpo Todo (Normal)", price: 10.00, extra: 1.50 }
+                ]
+            },
+            paintedNormal: {
+                name: "🎨 Pintura Simples (Normal)",
+                icon: "🎨",
+                description: "Colorido básico com sombras suaves - Estilo Normal",
+                items: [
+                    { id: "painted_normal_perfil", name: "Perfil Pintado (Normal)", price: 6.00, extra: 1.50 },
+                    { id: "painted_normal_meio", name: "Meio Corpo Pintado (Normal)", price: 8.00, extra: 1.50 },
+                    { id: "painted_normal_corpo", name: "Corpo Todo Pintado (Normal)", price: 12.00, extra: 1.50 }
+                ]
+            },
+            renderedNormal: {
+                name: "✨ Renderizado (Normal)",
+                icon: "✨",
+                description: "Arte finalizada com sombras e luzes - Estilo Normal",
+                items: [
+                    { id: "rendered_normal_perfil", name: "Perfil Renderizado (Normal)", price: 8.00, extra: 1.50 },
+                    { id: "rendered_normal_meio", name: "Meio Corpo Renderizado (Normal)", price: 10.00, extra: 1.50 },
+                    { id: "rendered_normal_corpo", name: "Corpo Todo Renderizado (Normal)", price: 14.00, extra: 1.50 }
+                ]
+            }
+        };
+
+        let currentUserPlan = 'free';
+        let cart = [];
+        
+        // Checkout Variables
+        let checkoutData = {
+            charactersCount: 1,
+            withoutSignature: false
+        };
+
+        // Carrinho Functions
+        function loadCart() {
+            const saved = localStorage.getItem('pood_cart');
+            if (saved) {
+                cart = JSON.parse(saved);
+            }
+            updateCartDisplay();
+        }
+
+        function saveCart() {
+            localStorage.setItem('pood_cart', JSON.stringify(cart));
+        }
+
+        function addToCart(itemId, itemName, price, extra) {
+            const isMember = currentUserPlan !== 'free';
+            const finalPrice = isMember ? price * 0.9 : price;
+            
+            const existingItem = cart.find(item => item.id === itemId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: itemId,
+                    name: itemName,
+                    price: finalPrice,
+                    originalPrice: price,
+                    extra: extra,
+                    quantity: 1
+                });
+            }
+            saveCart();
+            updateCartDisplay();
+            
+            const btn = event.target;
+            btn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-cart-plus"></i> Adicionar ao Carrinho';
+            }, 1500);
+        }
+
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotalSpan = document.getElementById('cartTotal');
+            
+            let total = 0;
+            let itemCount = 0;
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<div style="text-align: center; padding: 2rem; color: #888;">Seu carrinho está vazio</div>';
+            } else {
+                cartItemsDiv.innerHTML = '';
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    itemCount += item.quantity;
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">R$ ${item.price.toFixed(2).replace('.', ',')} cada</div>
+                            <div class="extra-info">➕ Personagem adicional: + R$ ${item.extra.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <input type="number" class="cart-item-quantity" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
+                            <button class="remove-item" onclick="removeFromCart(${index})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    cartItemsDiv.appendChild(itemDiv);
+                });
+            }
+            
+            cartCount.textContent = itemCount;
+            cartTotalSpan.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function updateQuantity(index, quantity) {
+            quantity = parseInt(quantity);
+            if (quantity > 0 && quantity <= 10) {
+                cart[index].quantity = quantity;
+                saveCart();
+                updateCartDisplay();
+            } else if (quantity > 10) {
+                alert('Máximo de 10 itens por produto!');
+                updateCartDisplay();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartDisplay();
+        }
+
+        function clearCart() {
+            cart = [];
+            saveCart();
+            updateCartDisplay();
+        }
+
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+        }
+
+        // Checkout Functions
+        function startCheckout() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            toggleCart();
+            resetCheckout();
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        function resetCheckout() {
+            checkoutData = {
+                charactersCount: 1,
+                withoutSignature: false
+            };
+            document.getElementById('charactersCount').value = 1;
+            document.getElementById('step1').classList.add('active-step');
+            document.getElementById('step2').classList.remove('active-step');
+            document.getElementById('step3').classList.remove('active-step');
+            
+            // Reset signature buttons
+            document.querySelectorAll('.signature-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+        function nextStep() {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            
+            if (step1.classList.contains('active-step')) {
+                const count = parseInt(document.getElementById('charactersCount').value);
+                if (count >= 1 && count <= 10) {
+                    checkoutData.charactersCount = count;
+                    step1.classList.remove('active-step');
+                    step2.classList.add('active-step');
+                } else {
+                    alert('Por favor, informe um número entre 1 e 10 personagens.');
+                }
+            }
+        }
+
+        function setSignature(without) {
+            checkoutData.withoutSignature = without;
+            document.querySelectorAll('.signature-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function prevStep() {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            
+            if (step2.classList.contains('active-step')) {
+                step2.classList.remove('active-step');
+                step1.classList.add('active-step');
+            } else if (step3.classList.contains('active-step')) {
+                step3.classList.remove('active-step');
+                step2.classList.add('active-step');
+            }
+        }
+
+        function nextToFinal() {
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            
+            if (checkoutData.withoutSignature === null) {
+                alert('Por favor, escolha se deseja ou não a assinatura do produtor.');
+                return;
+            }
+            
+            // Update order summary
+            const orderSummary = document.getElementById('orderSummary');
+            let total = 0;
+            let itemsHtml = '';
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                itemsHtml += `
+                    <div style="margin-bottom: 0.8rem;">
+                        <strong>${item.name}</strong> x${item.quantity}<br>
+                        R$ ${itemTotal.toFixed(2).replace('.', ',')}
+                    </div>
+                `;
+            });
+            
+            const extraTotal = cart.reduce((sum, item) => sum + (item.extra * item.quantity), 0);
+            const charactersExtra = checkoutData.charactersCount > 1 ? (checkoutData.charactersCount - 1) * extraTotal : 0;
+            const finalTotal = total + charactersExtra;
+            
+            orderSummary.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong>🛍️ Itens:</strong><br>
+                    ${itemsHtml}
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>👥 Personagens:</strong> ${checkoutData.charactersCount}<br>
+                    ${checkoutData.charactersCount > 1 ? `<span style="font-size: 0.7rem;">+ R$ ${charactersExtra.toFixed(2).replace('.', ',')} (personagens adicionais)</span>` : ''}
+                </div>
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>✍️ Assinatura:</strong> ${checkoutData.withoutSignature ? 'Sem assinatura do produtor' : 'Com assinatura do produtor'}
+                </div>
+                <div style="margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #e67e22;">
+                    <strong>💰 Total:</strong> R$ ${finalTotal.toFixed(2).replace('.', ',')}
+                </div>
+            `;
+            
+            step2.classList.remove('active-step');
+            step3.classList.add('active-step');
+        }
+
+        function sendFinalOrder() {
+            let message = '🎨 *NOVA ENCOMENDA - POOD* 🎨\n\n';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `📝 *${item.name}* x${item.quantity}\n`;
+                message += `   💰 R$ ${itemTotal.toFixed(2).replace('.', ',')}\n`;
+            });
+            
+            const extraTotal = cart.reduce((sum, item) => sum + (item.extra * item.quantity), 0);
+            const charactersExtra = checkoutData.charactersCount > 1 ? (checkoutData.charactersCount - 1) * extraTotal : 0;
+            const finalTotal = total + charactersExtra;
+            
+            message += `\n👥 *Personagens:* ${checkoutData.charactersCount}\n`;
+            if (checkoutData.charactersCount > 1) {
+                message += `   ➕ Personagens adicionais: + R$ ${charactersExtra.toFixed(2).replace('.', ',')}\n`;
+            }
+            message += `✍️ *Assinatura:* ${checkoutData.withoutSignature ? 'Sem assinatura do produtor' : 'Com assinatura do produtor'}\n`;
+            message += `\n💰 *TOTAL:* R$ ${finalTotal.toFixed(2).replace('.', ',')}`;
+            if (currentUserPlan !== 'free') {
+                message += `\n💚 *Desconto de 10% aplicado!*`;
+            }
+            message += `\n\n📱 *Dados para contato:*\n`;
+            message += `Nome: ${profileSimple.name || 'Não informado'}\n`;
+            message += `\n🔗 *Pagamento via PIX:* k.k.pood.drawing@gmail.com\n`;
+            message += `\n*Após o pagamento, envie o comprovante para confirmar!*`;
+            
+            const phoneNumbers = ['5544991027941', '5521970331467'];
+            const phone = phoneNumbers[0];
+            
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Limpar carrinho e fechar modal
+            clearCart();
+            document.getElementById('checkoutModal').classList.remove('active');
+            toggleCart();
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // Load Commissions
+        function loadCommissions() {
+            const container = document.getElementById('commissions-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            for (const [key, cat] of Object.entries(commissionsData)) {
+                let itemsHtml = '<div class="commission-grid">';
+                cat.items.forEach(item => {
+                    const isMember = currentUserPlan !== 'free';
+                    const finalPrice = isMember ? item.price * 0.9 : item.price;
+                    const hasDiscount = isMember;
+                    
+                    itemsHtml += `
+                        <div class="product-card">
+                            <div class="product-icon">${cat.icon}</div>
+                            <h4>${item.name}</h4>
+                            <div class="product-price">
+                                R$ ${finalPrice.toFixed(2).replace('.', ',')}
+                                ${hasDiscount ? `<small style="text-decoration: line-through; color: #888; font-size: 0.8rem;"> R$ ${item.price.toFixed(2).replace('.', ',')}</small>` : ''}
+                            </div>
+                            ${hasDiscount ? '<div class="member-price">💚 10% OFF para assinantes!</div>' : ''}
+                            <div class="extra-info">➕ Personagem adicional: + R$ ${item.extra.toFixed(2).replace('.', ',')}</div>
+                            <button class="btn-add-cart" onclick="addToCart('${item.id}', '${item.name}', ${item.price}, ${item.extra})">
+                                <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    `;
+                });
+                itemsHtml += '</div>';
+                
+                container.innerHTML += `
+                    <div class="category-card">
+                        <div class="category-title">${cat.icon} ${cat.name}</div>
+                        <p style="color: #aaa; margin-bottom: 1rem;">${cat.description}</p>
+                        ${itemsHtml}
+                    </div>
+                `;
+            }
+        }
+
+        // UI Functions
+        function showSection(section) {
+            document.querySelectorAll('[id$="-section"]').forEach(s => s.style.display = 'none');
+            document.getElementById(`${section}-section`).style.display = 'block';
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const btn = document.getElementById('themeToggle');
+            if (document.body.classList.contains('light-mode')) {
+                btn.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                btn.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        function goToProfile() {
+            showSection('profile');
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+            document.getElementById('profileNavBtn').classList.add('active');
+        }
+
+        function openPixModal(plan) { document.getElementById('pixModal').style.display = 'flex'; }
+        function closePixModal() { document.getElementById('pixModal').style.display = 'none'; }
+        function copyPix() { navigator.clipboard.writeText('k.k.pood.drawing@gmail.com'); alert('✅ Chave PIX copiada!'); }
+        function sendPaymentProof() { window.open('https://wa.me/5544991027941?text=Olá! Realizei o pagamento da assinatura da POOD via PIX. Segue o comprovante.', '_blank'); closePixModal(); }
+        function openWhatsApp(plan) { window.open('https://wa.me/5544991027941?text=Olá! Gostaria de participar da comunidade POOD gratuitamente!', '_blank'); }
+
+        // Perfil Functions
+        let profileSimple = {
+            name: "Artista POOD",
+            bio: "Artista apaixonado por arte! 🎨✨",
+            avatar: ""
+        };
+
+        function loadProfileSimple() {
+            const saved = localStorage.getItem('pood_profile_simple');
+            if (saved) {
+                profileSimple = JSON.parse(saved);
+                updateProfileDisplaySimple();
+            }
+        }
+
+        function updateProfileDisplaySimple() {
+            document.getElementById('profileNameSimple').innerText = profileSimple.name;
+            document.getElementById('profileBioSimple').innerText = profileSimple.bio;
+            const badgeText = currentUserPlan !== 'free' ? 'Membro Premium 🎖️' : 'Membro Gratuito';
+            document.getElementById('profileBadgeSimple').innerText = badgeText;
+            
+            if (profileSimple.avatar) {
+                const avatarDiv = document.getElementById('profileAvatarSimple');
+                avatarDiv.style.backgroundImage = `url(${profileSimple.avatar})`;
+                avatarDiv.style.backgroundSize = 'cover';
+                avatarDiv.innerHTML = '<div class="avatar-edit">✏️</div>';
+            } else {
+                const avatarDiv = document.getElementById('profileAvatarSimple');
+                avatarDiv.style.backgroundImage = '';
+                avatarDiv.innerHTML = '🎨<div class="avatar-edit">✏️</div>';
+            }
+        }
+
+        function editNameSimple() { openProfileModalSimple(); }
+        function editBioSimple() { openProfileModalSimple(); }
+        function editAvatarSimple() { openProfileModalSimple(); }
+
+        function openProfileModalSimple() {
+            document.getElementById('editNameInput').value = profileSimple.name;
+            document.getElementById('editBioInput').value = profileSimple.bio;
+            document.getElementById('editAvatarInput').value = profileSimple.avatar || '';
+            document.getElementById('profileEditModal').style.display = 'flex';
+        }
+
+        function saveProfileSimple() {
+            profileSimple.name = document.getElementById('editNameInput').value || profileSimple.name;
+            profileSimple.bio = document.getElementById('editBioInput').value || profileSimple.bio;
+            profileSimple.avatar = document.getElementById('editAvatarInput').value;
+            localStorage.setItem('pood_profile_simple', JSON.stringify(profileSimple));
+            updateProfileDisplaySimple();
+            closeProfileModal();
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileEditModal').style.display = 'none';
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const plan = document.getElementById('planSelect').value;
+            if (!name) return alert('Preencha seu nome!');
+            
+            currentUserPlan = plan;
+            
+            if (plan !== 'free') {
+                document.getElementById('profileNavBtn').style.display = 'block';
+                document.getElementById('profileFloatBtn').style.display = 'flex';
+            } else {
+                document.getElementById('profileNavBtn').style.display = 'block';
+                document.getElementById('profileFloatBtn').style.display = 'flex';
+            }
+            
+            loadCommissions();
+            updateProfileDisplaySimple();
+            
+            const msg = document.getElementById('successMsg');
+            msg.style.display = 'block';
+            if (plan === 'free') {
+                msg.innerHTML = '✅ Inscrição realizada! Bem-vindo(a) à comunidade!';
+            } else {
+                msg.innerHTML = '✅ Inscrição realizada! 💚 PIX: k.k.pood.drawing@gmail.com\nApós o pagamento, envie o comprovante no WhatsApp para liberarmos seu desconto de 10%!';
+                setTimeout(() => openPixModal(plan), 500);
+            }
+            setTimeout(() => msg.style.display = 'none', 8000);
+            
+            document.getElementById('subscription-form').reset();
+        }
+
+        // Particles Effect
+        function createParticles() {
+            const particlesDiv = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 5 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = Math.random() * 10 + 5 + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particlesDiv.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        createParticles();
+        loadProfileSimple();
+        loadCommissions();
+        loadCart();
+        
+        const savedSimple = localStorage.getItem('pood_profile_simple');
+        if (savedSimple) {
+            document.getElementById('profileNavBtn').style.display = 'block';
+            document.getElementById('profileFloatBtn').style.display = 'flex';
+        }
+    </script>
+</body>
+  </html>
